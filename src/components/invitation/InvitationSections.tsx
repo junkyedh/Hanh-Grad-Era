@@ -1,4 +1,4 @@
-import { editorialContent as copy, siteContent } from "@/data/content";
+import { editorialContent as copy } from "@/data/content";
 import { event } from "@/data/event";
 
 const dateLabel = new Intl.DateTimeFormat("en-GB", {
@@ -6,12 +6,11 @@ const dateLabel = new Intl.DateTimeFormat("en-GB", {
 }).format(new Date(event.photoSession.startsAt));
 const timeFormat = new Intl.DateTimeFormat("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: event.timeZone });
 
-function Accent({ kind }: { kind: "calculator" | "chart" | "coins" }) {
+function Accent({ kind }: { kind: "calculator" | "chart" }) {
   return (
     <svg className={`accounting-accent accent-${kind}`} viewBox="0 0 80 80" fill="none" stroke="currentColor" strokeWidth="3" aria-hidden="true">
       {kind === "calculator" ? <><rect x="17" y="7" width="46" height="66" rx="6" /><path d="M25 17h30v15H25zM26 43h5m9 0h5m9 0h1M26 54h5m9 0h5m9 0h1M26 65h5m9 0h5m9 0h1" /></>
-        : kind === "chart" ? <><path d="M10 9v60h61M20 59V43h10v16m10 0V30h10v29m10 0V16h10v43M16 31l19-15 15 5L69 5" /></>
-        : <><ellipse cx="32" cy="48" rx="23" ry="10" /><path d="M9 48v12c0 13 46 13 46 0V48M9 54c0 13 46 13 46 0" /><circle cx="49" cy="27" r="20" /><path d="M49 14v26m7-21c-15-8-19 12-6 9s13 16-7 8" /></>}
+        : <><path d="M10 9v60h61M20 59V43h10v16m10 0V30h10v29m10 0V16h10v43M16 31l19-15 15 5L69 5" /></>}
     </svg>
   );
 }
@@ -19,7 +18,7 @@ function Accent({ kind }: { kind: "calculator" | "chart" | "coins" }) {
 export function CoverSection() {
   return (
     <section className="cover section-wrap" aria-labelledby="cover-title">
-      <header className="edition-line"><span>{siteContent.title}</span><span>{copy.cover.edition}</span></header>
+      <header className="edition-line"><span>{copy.intro.brand}</span><span>{copy.cover.edition}</span></header>
       <div className="cover-grid">
         <div className="cover-type">
           <p className="eyebrow">{copy.cover.class}</p>
@@ -82,36 +81,26 @@ export function AccountingDecorations() {
 }
 
 export function LocationSection() {
-  // No approved map URL or coordinates are configured. Do not invent a preview.
   const helpContact = event.contacts[1];
+  const directionsQuery = encodeURIComponent(`${event.venue}, ${event.building}`);
+  const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${directionsQuery}`;
   return (
     <section className="location-section section-wrap" aria-labelledby="location-title">
       <h2 id="location-title" className="display-heading font-display" data-reveal>{copy.location.headline}</h2>
       <div className="location-grid">
         <div className="location-map" data-reveal="left">
           <h3 className="location-subheading font-display">{copy.location.where}</h3>
-          <div className="map-fallback" role="img" aria-label={copy.location.fallback}>
-            <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="m8 15 16-6 16 6 16-6v40l-16 6-16-6-16 6zm16-6v40m16-34v40" /><circle cx="32" cy="30" r="11" /><path d="m24 38 16-16" /></svg>
+          <div className="map-fallback">
             <p>{copy.location.fallback}</p><span>{copy.location.fallbackHint}</span>
           </div>
-          <div className="venue-row"><div><h4>{event.venue}</h4><p>{event.building}</p></div><button className="text-action" disabled>{copy.location.action} ↗</button></div>
+          <div className="venue-row"><div><h4>{event.venue}</h4><p>{event.building}</p></div><a className="text-action directions-link" href={directionsUrl} target="_blank" rel="noopener noreferrer">{copy.location.action} <span aria-hidden="true">↗</span></a></div>
         </div>
         <div className="location-help" data-reveal="right">
           <h3 className="location-subheading font-display">{copy.location.assistance}</h3>
           <p>{copy.location.hint}</p>
-          <Accent kind="coins" />
-          <div className="help-contact"><p>{helpContact.name}</p><p className="contact-number">{helpContact.phone}</p><button className="text-action" disabled>{copy.location.call} ↗</button></div>
+          <div className="help-contact"><p>{helpContact.name}</p><a className="contact-number" href={`tel:${helpContact.tel}`}>{helpContact.phone}</a><a className="text-action call-link" href={`tel:${helpContact.tel}`}>{copy.location.call} <span aria-hidden="true">↗</span></a></div>
         </div>
       </div>
-    </section>
-  );
-}
-
-export function WishesPreview() {
-  return (
-    <section className="wishes-preview section-wrap" aria-labelledby="wishes-title" data-reveal>
-      <h2 id="wishes-title" className="display-heading font-display">{copy.wishes.headline}</h2>
-      <div><p>{copy.wishes.hint}</p><div className="action-row"><button className="text-action" disabled>{copy.wishes.yes}</button><button className="text-action" disabled>{copy.wishes.later}</button></div></div>
     </section>
   );
 }
@@ -120,7 +109,7 @@ export function FinalNote() {
   return (
     <footer className="final-note section-wrap" data-reveal>
       <div><h2 className="display-heading font-display">{copy.final.headline}</h2><p className="final-copy">{copy.final.note}</p></div>
-      <div className="closing-choices"><span className="closing-heart" aria-hidden="true">♡</span><button className="text-action" disabled>{copy.final.yes} ↗</button><button className="text-action" disabled>{copy.final.no} ↗</button></div>
+      <span className="closing-heart" aria-hidden="true">♡</span>
     </footer>
   );
 }

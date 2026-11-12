@@ -1,8 +1,8 @@
 # Graduation Invitation Website — Project Specification
 
-> **Version:** 1.4.1 — Clean, privacy-conscious specification  
+> **Version:** 1.5 — Unified RSVP and optional wish
 > **Canonical repository path:** `docs/PROJECT_SPEC.md`  
-> **Status:** S1 complete; S2 implemented and technically verified, but visual refinement is required. **Next: S2R + S3 only.**  
+> **Status:** S1–S5 implemented; unified RSVP/wish flow and focused UI refinements complete. Calendar generation and final QA remain.
 > **Authority:** This document supersedes earlier plans and chat prompts where they conflict.  
 > **Scope:** Requirements and implementation plan; **not** a claim that the changes below are already implemented.
 
@@ -11,7 +11,7 @@
 - This is an **existing Next.js application**. Do not scaffold a new project, initialize Git, modify remotes or overwrite starter configuration without a demonstrated need.
 - **Start with `git status` and inspect current diffs.** Preserve all staged and unstaged changes from S1 and S2. Do not reset, clean, force-checkout, commit, push or deploy unless explicitly requested.
 - `docs/PROJECT_SPEC.md` is the **only active specification**. Previous files in `docs/` are historical, not competing instructions. Do not create a second active specification at repository root.
-- **Next execution scope:** implement **S2R (editorial visual refinement)** and **S3 (motion/music foundation)** only. S4–S8 remain out of scope until separately approved.
+- **Current implementation:** the personalized invitation includes one unified RSVP + optional message form delivered through the existing Formspree form. Do not add SMS RSVP, a second submission, backend, database or dependencies.
 - Reuse existing components and data models. Avoid implementing duplicate components or rewriting completed S1 routing.
 - Keep changes lightweight: prefer CSS, SVG and browser APIs. Do not add an animation library, map SDK, state manager, CMS or backend merely for convenience.
 - Preserve privacy in reports: refer to roles such as *graduate*, *guest* and *help contact* rather than repeating names, phone numbers or identifying details. Use values already configured in local source files.
@@ -25,19 +25,15 @@
 
 - Next.js App Router, React, strict TypeScript, Tailwind CSS, ESLint and npm; target deployment: Vercel.
 - Existing `src/app/` layout and `@/*` imports must be respected. Inspect local `package.json` and `next.config.ts` for actual versions and feature flags rather than relying on memory.
-- No separately hosted application backend is needed. **Formspree** is the approved external service for sending wishes in a later stage.
+- No separately hosted application backend is needed. **Formspree** is the existing external service for the unified RSVP and optional-wish form.
 
 ### 1.2 Stage S1 — complete; preserve
 
 Implemented personalized `/[slug]` routes, a neutral root route, safe 404 behavior, generic sharing metadata, server-only guest/event/content data, a shared invitation type and initial server-rendered invitation composition. Previous checks covered demo guests, display-name overrides, correct event data and absence of the entire guest list from browser bundles.
 
-### 1.3 Stage S2 — technically complete; **visual review pending**
+### 1.3 Stages S2/S2R/S3 — implemented; preserve
 
-Implemented the envelope intro, client-side invitation experience, main editorial sections, font/style foundation and a no-JavaScript fallback. Previous reported checks passed lint, types, production build, six viewport widths, keyboard interactions, reduced motion and S1 regressions. Music, wishes and event actions were left for later stages.
-
-**Visual problems identified in the current desktop screenshot:** excessive unused background space, a relatively small centered envelope, weak/ordinary headline treatment, redundant opening CTA and music-development text, inconsistent Vietnamese glyph rendering and insufficient movement/graphic rhythm. **A passing build does not mean this visual design is approved.**
-
-This specification is based on the reported implementation and reviewed screenshots; Codex must inspect the actual local working tree before editing.
+The envelope intro, editorial invitation, Vietnamese font setup, responsive sections, reduced-motion handling, optional music and no-JavaScript fallback are implemented. Preserve these behaviors while refining individual sections. Later work added the unified RSVP/optional-wish form.
 
 ## 2. Product goals and fixed content policy
 
@@ -53,7 +49,7 @@ This specification is based on the reported implementation and reviewed screensh
 
 ### 3.1 Language
 
-- **English-first UI throughout:** headlines, invitation text, button labels, helper text, validation, errors, RSVP/SMS copy, decorations and accessibility labels.
+- **English-first UI throughout:** headlines, invitation text, button labels, helper text, validation, errors, RSVP copy, decorations and accessibility labels.
 - Allowed exceptions: configured Vietnamese **guest `displayName`**, names of participants/contacts, and official place names as stored in source data. Do not automatically prepend English “Dear” or append a second honorific to `displayName`.
 - Do not infer Vietnamese pronouns, honorifics or gender from guest names; use exact configured values.
 - Test diacritics; do not replace accented text with unaccented approximations to hide typography bugs.
@@ -71,7 +67,7 @@ This specification is based on the reported implementation and reviewed screensh
 - No duplicate opening controls. Avoid “coming soon” text on production-facing UI.
 - Centralize adjustable English copy in `src/data/content.ts` when possible.
 
-**Optional copy vocabulary:** `A LETTER FOR YOU`, `OPEN`, `I DID IT!`, `IT'S A DATE!`, `THE DETAILS`, `WHERE`, `ON THE DAY`, `GOT SOMETHING TO TELL ME?`, `Of course! ♡`, `Maybe later`, `Send My Wish ♡`, `NO GIFTS, JUST YOU! ♡`.
+**Current copy vocabulary:** `SPECIAL DELIVERY`, `A LETTER FOR YOU`, `I DID IT!`, `FIND ME THERE`, `WHERE`, `NEED A HAND?`, `WILL YOU BE THERE?`, `I'll be there!`, `Sending love from afar`, `Leave me a little note?`, `SEAL & SEND`, `NO GIFTS, JUST YOU!`.
 
 ## 4. Visual identity — S2R priority
 
@@ -103,9 +99,9 @@ This specification is based on the reported implementation and reviewed screensh
 - Cover: one oversized first-person headline, graduate brand/name from configuration, a deliberate portrait placeholder and minimal accompanying text.
 - Personal letter: one concise conversational English paragraph with resolved guest treatment; do not duplicate it in other sections.
 - Event details: bold date/photography time and official venue, but avoid repeating facts throughout the page.
-- Closing: short no-gifts note and simplified RSVP choices.
+- Closing: short no-gifts note. Attendance choices and the optional note live together in one Formspree form.
 - Alternate dark/cream blocks, crop/scale display typography with care, use striking lines and whitespace **purposefully**.
-- RSVP visual inspiration: a large typographic question beside two simple choices. **Do not add name/email/reminder/note fields or a gimmicky slide-to-submit control.** Functional SMS handling belongs to S6.
+- RSVP visual direction: oversized typographic question beside clear native radio cards. Do not add name/email/reminder fields or a drag-to-submit interaction.
 
 
 ## 5. Typography — Fixed Font Specification (S2R)
@@ -246,23 +242,23 @@ and stop when the acceptance criteria pass.
 - Planned asset: `public/audio/grad-theme.mp3`. If absent, hide/disable the public music button **without adding a “coming soon” sentence**.
 - Do not download or generate an unlicensed commercial music track; do not add a music-player dependency.
 
-## 7. Location section — S2R visual refinement
+## 7. Location and contact section
 
 ### 7.1 Layout
 
-- Use a full-width **ink/near-black** editorial band with a very large cream headline `THE DETAILS`.
-- Desktop: two columns, approximately **60% map / 40% assistance**; thin dividing rule. Left: `WHERE`, generously sized muted map preview, a compact `DIRECTIONS` action and configured venue text. Right: `ON THE DAY`, one helpful English line and one clear call action.
+- Use a full-width **ink/near-black** editorial band with a very large cream headline `FIND ME THERE`.
+- Desktop: two columns, approximately **60% location / 40% contact**; thin dividing rule. Left: `WHERE`, muted map placeholder, `GET DIRECTIONS` and configured venue text. Right: `NEED A HAND?`, one helpful English line, the configured help contact and a working `CALL` link.
 - Mobile: clean vertical stacking (map above contact), no overflow or forced letter-size content.
-- Remove artificial `01/02` labels and duplicate contact/date text.
+- Remove decorative coins/icons from the contact block, artificial `01/02` labels and duplicate contact/date text.
 
 ### 7.2 Data accuracy and map implementation
 
-- Read the **exact destination URL, venue and contact** from `src/data/event.ts`; do not substitute values from screenshots or a different venue.
+- Read the venue and contact from `src/data/event.ts`. Build a Google Maps search URL from the configured venue/building until an exact destination URL is added to event configuration; do not substitute another venue.
 - Do not invent entrance gates, parking, landmarks or ceremony schedules.
 - Prefer a lightweight map preview with **no Google Maps API key**. An OpenStreetMap iframe is acceptable only with provider-compliant use and visible attribution; verify coordinates/centering against the configured venue and provide graceful fallback if blocked.
-- The `DIRECTIONS` action should use the user-approved URL from event config. A simple functional external link is preferable to a costly maps SDK.
+- The `GET DIRECTIONS` action opens the Google Maps search in a new tab with safe link attributes. Do not embed unverified coordinates or use a navigation link as an iframe source.
 - A Google Maps iframe using the official paid/keyed API is **not** required for V1.
-- The styled map/location section is S2R; fully functional map/tel actions are verified and polished in S6.
+- The styled map/location section is S2R. The directions search and configured `tel:` link are present; no verified coordinates are configured for an embedded map.
 
 ## 8. Components and existing code boundaries
 
@@ -279,15 +275,15 @@ RootLayout [server]
                 ├── Cover / Personal Letter / Event Details
                 ├── Finance/accounting micro-decorations
                 ├── Location / Map / Contacts [visual refinement]
-                ├── GraduationWishForm [S4/S5 — later]
-                └── Final Note / RSVP [S6 — later]
+                ├── GraduationWishForm [unified RSVP + optional note; one Formspree request]
+                └── FinalNote [short editorial closing; no duplicate RSVP controls]
 ```
 
 - Keep sensitive guest-list data **server-side**; do not send the full guest list to a client component to make animation easier.
 - Preserve existing `src/proxy.ts` invalid-route handling, metadata, demo routes and explicit custom-message override behavior.
 - Only introduce a small motion wrapper/map component if it materially improves readability. No global state-management library.
 
-## 9. Personalization and wishes — future S4/S5
+## 9. Personalization and unified RSVP + optional wish
 
 ### 9.1 Guest model
 
@@ -306,36 +302,36 @@ type Guest = {
 - A forwarded link is not user authentication. Do not claim that the route securely proves sender identity.
 - If the repository is public, **server-only code is still visible in Git history/source**. Obtain consent before placing real invitee data in a public repository; use nonidentifying demo records until then.
 
-### 9.2 Wishes interaction — S4
+### 9.2 Unified form interaction
 
-- Initial state on scroll is **question only**: `GOT SOMETHING TO TELL ME?` with `Of course! ♡` and `Maybe later`.
-- **Do not auto-expand on scroll.** Clicking the affirmative action gently reveals **one textarea**, a character counter and `Send My Wish ♡`.
-- No **FROM**, sender-name, email, relationship or other visible fields; guest identity context is already resolved from the link.
-- Message: trimmed, **5–500 Unicode code points**, required; clear English inline validation, pending, error and confirmed-success states. Preserve draft on submission failure.
-- “Maybe later” collapses/skips without blocking further scrolling.
+- One unified section headed `WILL YOU BE THERE?` contains two native radio choices; neither is preselected. The choices are `I'll be there!` (`attending`) and `Sending love from afar` (`not_attending`).
+- A single disclosure, `Leave me a little note?`, reveals one optional textarea. It starts collapsed and retains its draft when collapsed or after request failure.
+- No sender-name, email or relationship fields; guest context comes from the personalized route.
+- Empty note is valid. A nonempty trimmed note must contain **5–500 Unicode code points**. Show a right-aligned counter, clear validation, loading, error, rate-limit and confirmed-success states.
+- Use one wide `SEAL & SEND` button with subtle hover/focus feedback; submission remains a normal keyboard/touch button, never a drag gesture.
 - A successful submission can trigger a small nonessential heart/checkmark animation. Do not show success before provider confirmation.
 
-### 9.3 Wishes delivery — S5 (Formspree only)
+### 9.3 Delivery — existing Formspree form only
 
 - Use **Formspree** for submissions directly from the browser. Form configured through `NEXT_PUBLIC_FORMSPREE_FORM_ID` or its approved equivalent.
-- Submit the message and metadata derived from the current invite: `guest_slug` and `guest_display_name` (non-editable UI values). **These browser-submitted metadata values are not authenticated or tamper-proof.**
-- Recipient reads messages in Formspree Dashboard and/or configured email, after Formspree setup is completed.
-- Missing configuration => display an honest unavailable state. Error response => preserve draft and offer retry; success => replace form with a brief English thank-you.
-- No public wishes wall; no strict single-submission-per-guest guarantee with this architecture. Duplicate submissions and basic provider limits are accepted V1 trade-offs.
+- Send exactly one request containing `guest_slug`, `guest_display_name`, `attendance`, and `message` (empty string when no note is supplied) to the existing `NEXT_PUBLIC_FORMSPREE_FORM_ID` endpoint.
+- **Guest metadata is contextual, not verified identity**; a forwarded link can be reused. Formspree does not guarantee one response per guest slug.
+- Missing configuration => show `Replies aren't available yet.` and never claim success. Preserve selected attendance and draft on request failure; handle HTTP 429 separately. Success replaces controls with `Delivered! Thanks for letting me know.`
+- The graduate reviews both RSVP and optional messages in the same Formspree destination. No public wishes wall.
 - **Explicitly excluded:** Supabase, custom SQL tables/migrations, `app/api/wishes/route.ts`, user authentication, dedicated backend server, admin dashboard and custom email delivery service.
 
-## 10. Event actions and RSVP — future S6
+## 10. Remaining event actions — S6
 
-- **RSVP and wishes are separate actions.** Two concise RSVP options (`I'll be there!`, `Sending love from afar!`) prepare an English SMS to the configured primary contact. Opening SMS does **not** record attendance; the guest must send it. Provide copy-text / contact fallback for device differences.
+- RSVP is collected with the optional note in the single Formspree submission described in §9. Do not add SMS links or duplicate RSVP controls.
 - Save to Calendar generates an `.ics` file for the **configured meet-up/photo time**, not an invented official ceremony schedule. Use correct timezone/UTC conversion, UID, escaping, CRLF formatting and accurate location.
-- The Google Directions URL and `tel:` links must come from centralized event config. Do not repeat contact details in multiple sections.
+- Directions uses a Google Maps search composed from configured venue/building text; the help phone `tel:` link uses the exact configured contact value. Do not repeat contact details in multiple sections.
 - No RSVP database, user accounts, reminder emails or attendance dashboard.
 
 ## 11. Performance, accessibility and responsive behavior
 
 - Verify viewports at **360, 390, 430, 768, 1024, 1440px**, especially **1440×900** intro and small-screen map/contact layout.
 - No horizontal scrolling, clipped diacritics or overlay collisions. Make touch targets approximately 44px where practical.
-- Accessible envelope button, music control, wishes form, RSVP options and meaningful links. Preserve keyboard order/focus, visible focus ring, semantic headings and reduced-motion behavior.
+- Accessible envelope button, music control, unified RSVP/wish form and meaningful links. Preserve keyboard order/focus, visible focus ring, semantic headings and reduced-motion behavior.
 - Images have fixed space/ratio and useful alt text. Main portrait remains an intentional placeholder until the authorized asset is supplied; no random face image.
 - Prefer lightweight inline SVG/CSS decorations; avoid heavy GIF or animation dependencies. Use responsive `next/image` once real photos exist.
 - Maintain usable content when animation JS fails. Do not hide critical content behind an always-running entrance animation.
@@ -345,16 +341,15 @@ type Guest = {
 | Stage | Status | Expected outcome |
 | --- | --- | --- |
 | **S1 — Personalized routing** | **DONE** | Route lookup, demo records, metadata, 404 and private browser bundle. Preserve. |
-| **S2 — Initial invitation UI** | **Technically done, visually not approved** | Envelope, page skeleton, basic responsive experience. Refine in place. |
-| **S2R — Editorial refinement** | **NEXT** | Desktop envelope density, Vietnamese fonts, first-person language, typographic impact, clean sections, styled location/map layout. |
-| **S3 — Motion and music foundation** | **NEXT, together with S2R** | Envelope/cover/scroll transitions, reduced motion, persistent optional audio, honest missing-asset behavior. |
-| **S4 — Wishes progressive UI** | TODO | Question → reveal one textarea; validation and states, no sender field. |
-| **S5 — Formspree submission** | TODO | Provider integration and error/success handling; no custom backend. |
-| **S6 — Event actions** | TODO | ICS, verified directions/phone links, SMS RSVP. |
+| **S2 — Initial invitation UI** | **DONE** | Envelope, page skeleton and responsive experience. Preserve. |
+| **S2R — Editorial refinement** | **DONE** | Editorial composition, Vietnamese typography, first-person language and location/contact layout. Preserve. |
+| **S3 — Motion and music foundation** | **DONE** | Envelope/cover/scroll transitions, reduced motion and persistent optional audio. Preserve. |
+| **S4/S5 — Unified RSVP + optional wish** | **DONE** | Native attendance choices, optional textarea, validation/states and one existing Formspree submission. |
+| **S6 — Calendar action** | TODO | Generate and verify an ICS file for the configured photo-session interval. |
 | **S7 — Final QA** | TODO | Regression, desktop/mobile visual and accessibility review, asset/provider failures. |
 | **S8 — Vercel deployment** | TODO; explicit approval only | Production configuration and smoke tests. |
 
-**Next Codex run is constrained to S2R + S3 only.** Do not implement wishes, Formspree, SMS RSVP, calendar functionality or deployment as part of that run.
+**Next implementation scope is calendar generation only (S6), if approved.** Preserve the unified Formspree form; do not add SMS RSVP, a backend/database, or a second message submission.
 
 ## 13. S2R/S3 acceptance checklist
 
@@ -369,7 +364,7 @@ type Guest = {
 
 ### Location, motion and music
 
-- [ ] Full-width dark `THE DETAILS` section, clear map/contacts hierarchy, correctly configured destination and no invented location facts.
+- [ ] Full-width dark `FIND ME THERE` section, clear map/contact hierarchy, configured venue search link and no invented coordinates or location facts.
 - [ ] Preview is accurate and usable, or shows an honest fallback. Required OpenStreetMap attribution appears if applicable.
 - [ ] Envelope open, cover reveal and scroll beats demonstrate polished slide/zoom/fade motion without blank flashing or scroll hijacking.
 - [ ] `prefers-reduced-motion` works, keyboard interactions remain accessible, and no-JS content fallback survives.
@@ -385,20 +380,21 @@ type Guest = {
 
 ## 14. Inputs not yet supplied and accepted V1 trade-offs
 
-- Still needed later: authorized photos, authorized audio file, Formspree form configuration/recipient inbox, and final production guest records.
-- These do **not** block S2R or the non-audio portion of S3.
+- Still needed before final release: authorized photos/audio, final production guest records, and confirmation that the configured Formspree form delivers to the intended recipient inbox.
+- These do **not** block the current unified form UI or its mocked interaction checks.
 - Sending wishes through Formspree directly is simpler but does not authenticate invitees or guarantee exactly one message per link. This limitation is accepted for V1.
 - Avoid inventing production values. Read configured venue, link, event time and contacts from `src/data/event.ts`; ask for missing inputs only when a requested stage truly requires them.
 - Visual references are **art-direction cues only**. Do not copy another site's imagery, branding, copy, address or source code.
 
 ## 15. Version decisions
 
-- **V1.2:** English interface except configured Vietnamese names/honorifics/places; personalized routes; interactive letter intro; wishes hidden until user intent; no sender field; SMS RSVP; music and restrained accounting graphics.
+- **V1.2:** English interface except configured Vietnamese names/honorifics/places; personalized routes; interactive letter intro; optional wish hidden until user intent; no sender field; music and restrained accounting graphics.
 - **V1.3:** Formspree approved instead of database or custom wishes API. Backend scope minimized.
 - **S1:** Personalized routing and metadata complete, preserved without committing/pushing.
 - **S2:** UI skeleton implemented; technical checks passed but screenshots show visual refinement needed.
-- **V1.4.1 (current):** stronger editorial composition, Vietnamese font fix, first-person graduate copy, minimal text, dark map/contact design, smooth motion, explicit `docs/PROJECT_SPEC.md` path and privacy-conscious wording.
+- **V1.4.1:** stronger editorial composition, Vietnamese font fix, first-person graduate copy, minimal text, dark map/contact design, smooth motion and privacy-conscious wording.
+- **V1.5 (current):** one Formspree submission captures attendance and an optional wish; simplified location/contact layout and `SPECIAL DELIVERY` brand label; no SMS RSVP or second form.
 
 ## 16. Short execution prompt for Codex
 
-> Read `docs/PROJECT_SPEC.md` (v1.4.1) as the sole active specification, focusing on §§0–8 and 11–13. Inspect `git status` and the existing S1/S2 implementation. **Implement S2R + S3 motion/music foundation in place:** strengthen the desktop envelope/editorial composition, fix Vietnamese fonts, correct first-person narrative, reduce text clutter, refine the dark location/map section and add smooth accessible opening/scroll transitions. Preserve all staged and unstaged work, routes, fallback behavior and existing event configuration. **Do not implement Formspree/wishes, RSVP/calendar, deployment or unrelated changes yet.** Run lint, TypeScript, production build and available viewport checks; summarize changes and blockers. **Do not commit, push or deploy.**
+> Read `docs/PROJECT_SPEC.md` as the sole active specification. Preserve the existing personalized routes, editorial experience, optional music and unified RSVP + optional-wish Formspree form. The remaining S6 work is calendar generation only. Do not add SMS RSVP, another form, a backend/database, or dependencies. Run relevant lint, TypeScript, production build and viewport checks. Do not commit, push or deploy.

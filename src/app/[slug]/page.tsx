@@ -1,7 +1,12 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import InvitationPage from "@/components/invitation/InvitationPage";
-import { getGuest } from "@/data/guests";
+import { getGuest, getGuestRouteParams } from "@/data/guests";
+
+// Fully render known invitations so native disclosure works without JavaScript.
+export function generateStaticParams() {
+  return getGuestRouteParams();
+}
 
 type InvitationRouteProps = { params: Promise<{ slug: string }> };
 

@@ -1,12 +1,18 @@
-import { getInvitationMessage, siteContent } from "@/data/content";
+import { getInvitationMessage } from "@/data/content";
 import type { Guest } from "@/types/invitation";
+import InvitationExperience from "./InvitationExperience";
+import { AccountingDecorations, CoverSection, EventDetails, FinalNote, LocationSection, PersonalLetter, WishesPreview } from "./InvitationSections";
 
 export default function InvitationPage({ guest }: { guest: Readonly<Guest> }) {
   return (
-    <main className="mx-auto w-full max-w-2xl px-6 py-16">
-      <h1 className="text-3xl font-bold">{siteContent.title}</h1>
-      <p className="mt-8 text-xl">{guest.displayName}, ♡</p>
-      <p className="mt-4 leading-relaxed">{getInvitationMessage(guest)}</p>
-    </main>
+    <InvitationExperience displayName={guest.displayName}>
+      <CoverSection />
+      <PersonalLetter displayName={guest.displayName} message={getInvitationMessage(guest)} />
+      <EventDetails />
+      <AccountingDecorations />
+      <LocationSection />
+      <WishesPreview />
+      <FinalNote />
+    </InvitationExperience>
   );
 }

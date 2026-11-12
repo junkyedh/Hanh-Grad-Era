@@ -29,3 +29,8 @@ const guests: readonly Guest[] = [
 export function getGuest(slug: string): Readonly<Guest> | undefined {
   return guests.find((guest) => guest.slug === slug);
 }
+
+// Server build input only; never publish these paths as a guest directory.
+export function getGuestRouteParams(): { slug: string }[] {
+  return guests.map(({ slug }) => ({ slug }));
+}

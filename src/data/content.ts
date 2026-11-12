@@ -22,12 +22,13 @@ export const siteContent = {
 };
 
 export const editorialContent = {
-  intro: { eyebrow: "A little letter, a big milestone", note: "Something special, just for you.", open: "Open Invitation", music: "Music: Off", unavailable: "Music available soon" },
-  cover: { edition: "The graduation issue", headline: "SHE DID IT!", class: "CLASS OF 2026", caption: "A new chapter looks good on her.", portrait: "Graduation portrait coming soon", portraitLabel: "Reserved for a portrait of Dương Hải Hạnh" },
+  intro: { headline: ["A LETTER", "FOR", "YOU"], note: "A little celebration. A lot of heart.", open: "OPEN", accessibleOpen: "Open your invitation", postal: "PERSONAL DELIVERY" },
+  cover: { edition: "The graduation issue", headline: "I DID IT!", class: "CLASS OF 2026", caption: "And I'd love to celebrate with you.", portrait: "A new chapter", portraitLabel: "Graduation portrait placeholder" },
   letter: { label: "A personal invitation", signoff: "With love,", signature: "Hạnh ♡" },
-  event: { headline: "IT'S A DATE!", timezone: "Vietnam time · UTC+07:00", action: "Save the Date", unavailable: "Calendar download available soon" },
+  event: { headline: "IT'S A DATE!", timezone: "Vietnam time · UTC+07:00" },
   accounting: { title: "GRADUATION BALANCE SHEET", assets: "Good memories", liabilities: "Deadlines", worth: "Priceless ♡", stamp: "THE BOOKS ARE CLOSED" },
-  location: { headline: "DON'T GET LOST!", action: "Get Directions", unavailable: "Map and calling actions available soon", contacts: "A familiar voice, if you need one" },
-  wishes: { headline: "GOT SOMETHING TO TELL ME?", hint: "Before you go, is there anything you'd like to say to me?", yes: "Of course! ♡", later: "Maybe later", unavailable: "Wish writing available soon" },
-  final: { headline: "NO GIFTS, JUST YOU! ♡", note: "No gifts needed — having you there for a photo would mean so much to me! ♡", yes: "I'll be there!", no: "Sending love from afar!", unavailable: "RSVP messaging available soon", footer: "Made for a day worth remembering." },
+  location: { headline: "THE DETAILS", where: "WHERE", assistance: "ON THE DAY", hint: "Need a hand finding me? Here's a familiar voice.", action: "DIRECTIONS", call: "CALL", fallback: "Map preview unavailable", fallbackHint: "Use the venue details below to plan your visit." },
+  wishes: { headline: "GOT SOMETHING TO TELL ME?", hint: "Before you go, is there anything you'd like to say to me?", yes: "Of course! ♡", later: "Maybe later" },
+  final: { headline: "NO GIFTS, JUST YOU!", note: "Having you there for a photo would mean so much to me. ♡", yes: "I'll be there!", no: "Sending love from afar!" },
+  music: { off: "Music off", on: "Music on", play: "Play music", pause: "Pause music", blocked: "Playback blocked · retry", unavailable: "Audio unavailable" },
 };

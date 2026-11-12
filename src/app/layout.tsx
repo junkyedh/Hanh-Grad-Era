@@ -1,18 +1,19 @@
 import type { Metadata } from "next";
-import { Barlow_Condensed, DM_Sans } from "next/font/google";
+import { Barlow_Condensed, Be_Vietnam_Pro } from "next/font/google";
 import { siteContent } from "@/data/content";
 import "./globals.css";
 
-const bodyFont = DM_Sans({
+const bodyFont = Be_Vietnam_Pro({
   variable: "--font-body",
-  subsets: ["latin", "latin-ext"],
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
 const displayFont = Barlow_Condensed({
   variable: "--font-display",
-  subsets: ["latin", "latin-ext", "vietnamese"],
-  weight: ["600", "700", "800"],
+  subsets: ["latin", "vietnamese"],
+  weight: ["700", "800", "900"],
   display: "swap",
 });
 

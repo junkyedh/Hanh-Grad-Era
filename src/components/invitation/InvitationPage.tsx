@@ -4,7 +4,7 @@ import path from "node:path";
 import { event } from "@/data/event";
 import type { Guest } from "@/types/invitation";
 import InvitationExperience from "./InvitationExperience";
-import { AccountingDecorations, CoverSection, EventDetails, FinalNote, LocationSection, PersonalLetter } from "./InvitationSections";
+import { AccountingDecorations, CoverSection, EventDetails, LocationSection, PersonalLetter } from "./InvitationSections";
 import GraduationWishForm from "./GraduationWishForm";
 
 export default function InvitationPage({ guest }: { guest: Readonly<Guest> }) {
@@ -20,7 +20,6 @@ export default function InvitationPage({ guest }: { guest: Readonly<Guest> }) {
       <AccountingDecorations />
       <LocationSection />
       <GraduationWishForm guestSlug={guest.slug} guestDisplayName={guest.displayName} />
-      <FinalNote />
     </InvitationExperience>
   );
 }

@@ -20,9 +20,12 @@ export default function GraduationWishForm({ guestSlug, guestDisplayName }: Grad
   const [draft, setDraft] = useState("");
   const [status, setStatus] = useState<FormStatus>("idle");
   const submitLock = useRef(false);
+  const firstChoiceRef = useRef<HTMLInputElement>(null);
+  const noteRef = useRef<HTMLTextAreaElement>(null);
+  const [showChoiceError, setShowChoiceError] = useState(false);
   const count = Array.from(draft.trim()).length;
   const invalidNote = count > 0 && count < 5 ? copy.wishes.short : count > 500 ? copy.wishes.long : "";
-  const canSubmit = Boolean(attendance) && !invalidNote && validFormId && status !== "sending";
+  const canSubmit = validFormId && status !== "sending";
 
   function setDraftValue(event: ChangeEvent<HTMLTextAreaElement>) {
     setDraft(event.target.value);
@@ -32,7 +35,17 @@ export default function GraduationWishForm({ guestSlug, guestDisplayName }: Grad
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (submitLock.current || status === "success") return;
-    if (!attendance || invalidNote || !validFormId) return;
+    if (!validFormId) return;
+    if (!attendance) {
+      setShowChoiceError(true);
+      firstChoiceRef.current?.focus();
+      return;
+    }
+    if (invalidNote) {
+      if (!expanded) setExpanded(true);
+      noteRef.current?.focus();
+      return;
+    }
 
     submitLock.current = true;
     setStatus("sending");
@@ -75,46 +88,53 @@ export default function GraduationWishForm({ guestSlug, guestDisplayName }: Grad
             <p className="wish-helper">{copy.wishes.hint}</p>
             <fieldset className="attendance-options" aria-labelledby="attendance-legend">
               <legend id="attendance-legend" className="sr-only">{copy.wishes.attendanceLabel}</legend>
-              <label className={`attendance-choice${attendance === "attending" ? " is-selected" : ""}`}>
+              <label data-choice="attending" className={`attendance-choice${attendance === "attending" ? " is-selected" : ""}`}>
                 <input
                   type="radio"
+                  ref={firstChoiceRef}
                   name="attendance"
                   value="attending"
                   required
                   checked={attendance === "attending"}
-                  onChange={() => setAttendance("attending")}
+                  onChange={() => { setAttendance("attending"); setShowChoiceError(false); }}
                 />
                 <span className="attendance-indicator" aria-hidden="true" />
-                <span>{copy.wishes.yes}</span>
+                <span className="attendance-text">{copy.wishes.yes}</span>
+                <svg className="attendance-decor" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m5 13 4 4L19 7" /></svg>
               </label>
-              <label className={`attendance-choice${attendance === "not_attending" ? " is-selected" : ""}`}>
+              <label data-choice="not_attending" className={`attendance-choice${attendance === "not_attending" ? " is-selected" : ""}`}>
                 <input
                   type="radio"
                   name="attendance"
                   value="not_attending"
                   required
                   checked={attendance === "not_attending"}
-                  onChange={() => setAttendance("not_attending")}
+                  onChange={() => { setAttendance("not_attending"); setShowChoiceError(false); }}
                 />
                 <span className="attendance-indicator" aria-hidden="true" />
-                <span>{copy.wishes.no}</span>
+                <span className="attendance-text">{copy.wishes.no}</span>
+                <svg className="attendance-decor" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M21 3 9 15M21 3l-7 18-4-8-8-4 19-6Z" /></svg>
               </label>
             </fieldset>
+            {showChoiceError && <p className="choice-error" role="alert">{copy.wishes.chooseAttendance}</p>}
 
-            <div className="wish-disclosure">
+            <div className={`wish-disclosure${expanded ? " is-open" : ""}`}>
               <button
                 type="button"
                 className="wish-disclosure-button"
                 aria-expanded={expanded}
                 aria-controls="optional-note"
                 onClick={() => setExpanded((current) => !current)}
-              >{copy.wishes.disclosure}</button>
-              <span className="optional-label">{copy.wishes.optional}</span>
+              >
+                <span className="wish-disclosure-copy"><strong>{copy.wishes.disclosure}</strong></span>
+                <span className="note-toggle-mark" aria-hidden="true">{expanded ? "−" : "+"}</span>
+              </button>
             </div>
             {expanded && (
               <div id="optional-note" className="optional-note">
                 <label className="sr-only" htmlFor="graduation-wish-message">{copy.wishes.label}</label>
                 <textarea
+                  ref={noteRef}
                   id="graduation-wish-message"
                   name="message"
                   value={draft}
@@ -129,18 +149,16 @@ export default function GraduationWishForm({ guestSlug, guestDisplayName }: Grad
               </div>
             )}
 
-            <button type="submit" className="seal-submit" disabled={!canSubmit}>
-              <span>{status === "sending" ? copy.wishes.sending : copy.wishes.submit}</span>
-              <span className={`seal-icon${status === "sending" ? " is-sending" : ""}`} aria-hidden="true">
-                {status === "sending" ? <span className="submit-spinner" /> : (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                    <rect x="3.5" y="5.5" width="17" height="13" />
-                    <path d="m4 7 8 6 8-6" />
-                  </svg>
-                )}
-              </span>
+            {statusText && <p className="wish-status" role="status" aria-live="polite">{statusText}</p>}
+            <button type="submit" className="reply-submit" disabled={!canSubmit}>
+              <span className="reply-submit-label">{status === "sending" ? copy.wishes.sending : copy.wishes.submit}</span>
+              {status === "sending" ? <span className="submit-spinner" aria-hidden="true" /> : (
+                <svg className="reply-send-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="m22 2-7 20-4-9-9-4 20-7Z" />
+                  <path d="M22 2 11 13" />
+                </svg>
+              )}
             </button>
-            <p className="wish-status" role="status" aria-live="polite">{statusText || (!attendance ? copy.wishes.chooseAttendance : "")}</p>
           </form>
         )}
       </div>

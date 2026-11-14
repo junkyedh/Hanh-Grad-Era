@@ -40,3 +40,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Private invitations
+/docs/PRIVATE_GUESTS_51.json
+/docs/PRIVATE_GUESTS_ENV_LINE.txt
+/guest-links.txt
+/.env.local

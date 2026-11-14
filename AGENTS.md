@@ -10,12 +10,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 
 ## Project Specification
 
-- The authoritative specification is `docs/PROJECT_SPEC.md`.
-- Always follow the latest approved specification.
-- Files named `plan_V*.md` are historical references only.
-- Do not implement features outside the requested stage.
-- Preserve existing staged and unstaged changes.
-- Reuse existing components and infrastructure.
-- Do not initialize the project again.
-- Do not commit, push, or deploy unless explicitly requested.
+- `docs/PROJECT_SPEC.md` is the sole active project specification. Do not maintain or follow obsolete plans or handoffs.
+- Inspect the current source and relevant diffs before modifying code. Preserve all staged and unstaged user changes.
+- Preserve working functionality; never reinitialize the Next.js project. Reuse existing components and infrastructure, and avoid unnecessary dependencies.
+- Preserve personalized routing and server-side guest resolution, Vietnamese and English behavior, Formspree submission behavior, and existing map, music, and animation behavior.
+- Do not expose private guest records or slugs. Do not commit `.env.local` or private guest files. Never hardcode credentials or private environment values.
 - Run relevant checks after implementation.
+- Never commit, push, deploy, or rewrite Git history without explicit user approval.

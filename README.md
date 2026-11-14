@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hanh's Grad Era
 
-## Getting Started
+A personalized, bilingual graduation invitation built with Next.js. Guests open an individual link to see the invitation, choose whether they can attend, and optionally send a note.
 
-First, run the development server:
+## Tech stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js App Router 16, React 19, TypeScript
+- Tailwind CSS 4 and project CSS
+- Formspree for the attendance and optional message form
+
+## Main features
+
+- Server-resolved personalized invitation routes with a neutral root page and not-found handling
+- Vietnamese and English interface with guest-specific Vietnamese addressing
+- Interactive envelope, event and location details, configured contact links, and optional music
+- One attendance form with an optional message
+
+## Project structure
+
+- `src/app/` — App Router pages, root layout, and global styles
+- `src/components/invitation/` — invitation sections and client interactions
+- `src/data/` — event and copy configuration; guest lookup reads private guest data from the environment
+- `src/types/` — shared invitation types
+- `docs/PROJECT_SPEC.md` — current implementation reference
+
+## Local setup
+
+Requirements: Node.js and npm.
+
+```sh
+npm ci
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Set the environment variables below in a local `.env.local` file, then run `npm run dev` and open `http://localhost:3000`. Do not put real guest records or environment values in Git.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Purpose |
+| --- | --- |
+| `PRIVATE_GUESTS_JSON` | Private guest records used by server-side lookup and personalized route generation |
+| `NEXT_PUBLIC_FORMSPREE_FORM_ID` | Public Formspree form identifier used by the browser form; configure it without committing the actual value |
 
-## Learn More
+The public Formspree identifier is included in client-side requests by design. It is not an API credential. Keep guest records in an ignored local environment file or an appropriately restricted deployment environment.
 
-To learn more about Next.js, take a look at the following resources:
+## Available development commands
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Commands below are defined in `package.json`:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```sh
+npm run dev
+npm run lint
+npm run build
+npm run start
+```
 
-## Deploy on Vercel
+TypeScript can be checked with `npx tsc --noEmit`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The project is a Next.js application suitable for Vercel deployment. Configure the required environment variables in the deployment environment before building. Personalized routes are generated from the configured guest records; deployment access and link handling must reflect their privacy needs. Deployment has not been performed as part of this documentation.
+
+## Privacy notes
+
+Personalized links are not authentication: anyone who obtains a link can view and use that invitation. Search-engine no-index metadata does not restrict access. Guest data is read by server-side code, but each configured personalized route is rendered for delivery and may appear in build or hosting output. Use private repositories and appropriately restricted environment configuration for real guest records. Contact details in event configuration are rendered on the invitation and should be approved for that use.
+
+See [docs/PROJECT_SPEC.md](docs/PROJECT_SPEC.md) for the current application specification and verification checklist.

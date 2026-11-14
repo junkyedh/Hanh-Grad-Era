@@ -3,11 +3,14 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import EnvelopeIntro, { type OpeningPhase } from "./EnvelopeIntro";
 import MusicPlayer, { type MusicHandle } from "./MusicPlayer";
+import { LanguageProvider, LanguageSwitcher } from "./LanguageProvider";
+import type { GuestAddressing } from "@/data/content";
 
-export default function InvitationExperience({ displayName, dateStamp, hasAudio, children }: {
+export default function InvitationExperience({ displayName, dateStamp, hasAudio, addressing, children }: {
   displayName: string;
   dateStamp: string;
   hasAudio: boolean;
+  addressing: GuestAddressing;
   children: ReactNode;
 }) {
   const [phase, setPhase] = useState<OpeningPhase>("closed");
@@ -66,13 +69,16 @@ export default function InvitationExperience({ displayName, dateStamp, hasAudio,
   }
 
   return (
+    <LanguageProvider addressing={addressing}>
     <div className="invitation-experience" data-phase={phase}>
       <EnvelopeIntro displayName={displayName} dateStamp={dateStamp} phase={phase} onOpen={openInvitation}>
         <main ref={mainRef} tabIndex={-1} className="invitation-main" aria-label="Graduation invitation">
           {children}
         </main>
       </EnvelopeIntro>
+      <LanguageSwitcher />
       <MusicPlayer ref={musicRef} available={hasAudio} opened={phase !== "closed"} />
     </div>
+    </LanguageProvider>
   );
 }

@@ -4,4 +4,6 @@ export type Guest = {
   displayName: string;
   relationship: "senior" | "friend" | "junior";
   customMessage?: string;
+  customMessageVi?: string;
+  addressing?: import("@/data/content").GuestAddressing;
 };

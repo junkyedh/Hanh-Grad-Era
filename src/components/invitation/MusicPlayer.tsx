@@ -1,7 +1,7 @@
 "use client";
 
 import { useImperativeHandle, useRef, useState, type Ref } from "react";
-import { editorialContent } from "@/data/content";
+import { useInvitationCopy } from "./LanguageProvider";
 
 export type MusicHandle = { startIfEnabled: () => void };
 type AudioStatus = "off" | "playing" | "paused" | "blocked" | "unavailable";
@@ -16,7 +16,7 @@ export default function MusicPlayer({ ref, available, opened }: {
   const attemptRef = useRef(0);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [status, setStatus] = useState<AudioStatus>("off");
-  const copy = editorialContent.music;
+  const copy = useInvitationCopy().music;
 
   async function play() {
     if (!available || !audioRef.current) return;
@@ -58,7 +58,7 @@ export default function MusicPlayer({ ref, available, opened }: {
   const playing = status === "playing";
   const soundOn = opened ? playing : soundEnabled;
   const label = status === "unavailable" ? copy.unavailable
-    : !opened ? (soundEnabled ? "Turn background music off" : "Turn background music on")
+    : !opened ? (soundEnabled ? copy.off : copy.on)
     : playing ? copy.pause
     : status === "blocked" ? copy.blocked
     : copy.play;

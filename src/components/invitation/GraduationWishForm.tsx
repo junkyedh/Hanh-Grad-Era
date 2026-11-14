@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
-import { editorialContent as copy } from "@/data/content";
+import { useInvitationCopy, useLanguage } from "./LanguageProvider";
 
 export type GraduationWishFormProps = {
   guestSlug: string;
@@ -15,6 +15,8 @@ const formId = process.env.NEXT_PUBLIC_FORMSPREE_FORM_ID?.trim() ?? "";
 const validFormId = /^[a-zA-Z0-9]{6,32}$/.test(formId);
 
 export default function GraduationWishForm({ guestSlug, guestDisplayName }: GraduationWishFormProps) {
+  const copy = useInvitationCopy();
+  const { language } = useLanguage();
   const [attendance, setAttendance] = useState<Attendance | "">("");
   const [expanded, setExpanded] = useState(false);
   const [draft, setDraft] = useState("");
@@ -79,7 +81,7 @@ export default function GraduationWishForm({ guestSlug, guestDisplayName }: Grad
 
   return (
     <section className="wishes-preview section-wrap" aria-labelledby="wishes-title" data-reveal>
-      <h2 id="wishes-title" className="display-heading font-display">{copy.wishes.headline}</h2>
+      <h2 id="wishes-title" className={`display-heading ${language === "vi" ? "font-body" : "font-display"}`}>{copy.wishes.headline}</h2>
       <div className="wish-content">
         {status === "success" ? (
           <p className="wish-success" role="status" aria-live="polite">{copy.wishes.success}</p>

@@ -1,4 +1,4 @@
-import { getInvitationMessage } from "@/data/content";
+import { getInvitationMessage, getVietnameseInvitationMessage } from "@/data/content";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { event } from "@/data/event";
@@ -11,11 +11,12 @@ export default function InvitationPage({ guest }: { guest: Readonly<Guest> }) {
   return (
     <InvitationExperience
       displayName={guest.displayName}
+      addressing={guest.addressing ?? (guest.relationship === "senior" ? "chi" : guest.relationship === "junior" ? "em" : "ban")}
       dateStamp={new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: event.timeZone }).format(new Date(event.photoSession.startsAt))}
       hasAudio={existsSync(path.join(process.cwd(), "public/audio/grad-theme.mp3"))}
     >
       <CoverSection />
-      <PersonalLetter displayName={guest.displayName} message={getInvitationMessage(guest)} />
+      <PersonalLetter displayName={guest.displayName} name={guest.name} message={getInvitationMessage(guest)} messageVi={getVietnameseInvitationMessage(guest)} />
       <EventDetails />
       <AccountingDecorations />
       <LocationSection />

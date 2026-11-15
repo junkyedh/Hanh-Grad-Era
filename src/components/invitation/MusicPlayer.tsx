@@ -1,96 +1,122 @@
-"use client";
+'use client';
 
-import { useImperativeHandle, useRef, useState, type Ref } from "react";
-import { useInvitationCopy } from "./LanguageProvider";
+import { useCallback, useEffect, useImperativeHandle, useRef, useState, type Ref } from 'react';
+import { useInvitationCopy } from './LanguageProvider';
 
-export type MusicHandle = { startIfEnabled: () => void };
-type AudioStatus = "off" | "playing" | "paused" | "blocked" | "unavailable";
+export type MusicHandle = {
+  startIfEnabled: () => void;
+};
 
-export default function MusicPlayer({ ref, available, opened }: {
+type MusicPlayerProps = {
   ref: Ref<MusicHandle>;
   available: boolean;
-  opened: boolean;
-}) {
+};
+
+export default function MusicPlayer({ ref, available }: MusicPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const desiredRef = useRef(false);
-  const attemptRef = useRef(0);
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const [status, setStatus] = useState<AudioStatus>("off");
+  const enabledRef = useRef(true);
+
+  const [playing, setPlaying] = useState(false);
+  const [unavailable, setUnavailable] = useState(false);
+
   const copy = useInvitationCopy().music;
 
-  async function play() {
-    if (!available || !audioRef.current) return;
-    const attempt = ++attemptRef.current;
-    desiredRef.current = true;
-    try {
-      await audioRef.current.play();
-      if (attempt === attemptRef.current) setStatus("playing");
-    } catch {
-      if (attempt === attemptRef.current) {
-        desiredRef.current = false;
-        setStatus(audioRef.current.error ? "unavailable" : "blocked");
-      }
-    }
-  }
+  const tryPlay = useCallback(() => {
+    if (!available || !enabledRef.current || unavailable) return;
 
-  useImperativeHandle(ref, () => ({
-    startIfEnabled() { if (soundEnabled) void play(); },
-  }));
+    const audio = audioRef.current;
+    if (!audio || !audio.paused) return;
+
+    void audio.play().catch(() => {
+      if (audio.paused) setPlaying(false);
+    });
+  }, [available, unavailable]);
+
+  // Attempt autoplay on every invitation page.
+  useEffect(() => {
+    tryPlay();
+  }, [tryPlay]);
+
+  // Retry when the user opens the envelope.
+  useImperativeHandle(ref, () => ({ startIfEnabled: tryPlay }), [tryPlay]);
 
   function toggle() {
-    if (!available || status === "unavailable") return;
-    if (!opened) {
-      setSoundEnabled((current) => !current);
-      return;
-    }
-    if (soundEnabled && (status === "playing" || desiredRef.current)) {
-      ++attemptRef.current;
-      desiredRef.current = false;
-      audioRef.current?.pause();
-      setSoundEnabled(false);
-      setStatus("paused");
+    const audio = audioRef.current;
+    if (!audio || unavailable) return;
+
+    if (!audio.paused) {
+      enabledRef.current = false;
+      audio.pause();
     } else {
-      setSoundEnabled(true);
-      void play();
+      enabledRef.current = true;
+      tryPlay();
     }
   }
 
-  const playing = status === "playing";
-  const soundOn = opened ? playing : soundEnabled;
-  const label = status === "unavailable" ? copy.unavailable
-    : !opened ? (soundEnabled ? copy.off : copy.on)
-    : playing ? copy.pause
-    : status === "blocked" ? copy.blocked
-    : copy.play;
+  if (!available) return null;
 
   return (
     <>
       <audio
         ref={audioRef}
-        src={available ? "/audio/grad-theme.mp3" : undefined}
-        preload="metadata"
+        src="/audio/grad-theme.mp3"
+        preload="auto"
         loop
-        onPlay={() => { if (desiredRef.current) setStatus("playing"); else audioRef.current?.pause(); }}
-        onPause={() => { if (!desiredRef.current) setStatus("paused"); }}
-        onError={() => { desiredRef.current = false; setStatus("unavailable"); }}
+        onPlay={() => {
+          if (enabledRef.current) {
+            setPlaying(true);
+          } else {
+            audioRef.current?.pause();
+          }
+        }}
+        onPause={() => setPlaying(false)}
+        onError={() => {
+          setPlaying(false);
+          setUnavailable(true);
+        }}
       />
-      {available && (
-        <div className="music-control">
-          <button type="button" onClick={toggle} disabled={status === "unavailable"}
-            aria-pressed={soundOn} aria-label={label} title={label}>
-            {soundOn ? (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M11 5 6 9H3v6h3l5 4V5Z" /><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" />
-              </svg>
-            ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M11 5 6 9H3v6h3l5 4V5Z" /><path d="m16 9 5 6m0-6-5 6" />
-              </svg>
-            )}
-          </button>
-          <span className="sr-only" role="status">{label}</span>
-        </div>
-      )}
+
+      <div className="music-control">
+        <button
+          type="button"
+          onClick={toggle}
+          disabled={unavailable}
+          aria-pressed={playing}
+          aria-label={unavailable ? copy.unavailable : playing ? copy.pause : copy.play}
+        >
+          {playing ? (
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M11 5 6 9H3v6h3l5 4V5Z" />
+              <path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" />
+            </svg>
+          ) : (
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M11 5 6 9H3v6h3l5 4V5Z" />
+              <path d="m16 9 5 6m0-6-5 6" />
+            </svg>
+          )}
+        </button>
+      </div>
     </>
   );
 }

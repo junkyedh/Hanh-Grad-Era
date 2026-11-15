@@ -1,16 +1,16 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { getCopy, type GuestAddressing, type Language } from "@/data/content";
+import { editorialContent, getCopy, type GuestAddressing, type Language } from "@/data/content";
 
 const LanguageContext = createContext<{
   language: Language;
   setLanguage: (language: Language) => void;
-  addressing: GuestAddressing;
+  addressing?: GuestAddressing;
 } | null>(null);
 
-export function LanguageProvider({ addressing, children }: { addressing: GuestAddressing; children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>("vi");
+export function LanguageProvider({ addressing, initialLanguage = "vi", children }: { addressing?: GuestAddressing; initialLanguage?: Language; children: ReactNode }) {
+  const [language, setLanguage] = useState<Language>(initialLanguage);
 
   useEffect(() => { document.documentElement.lang = language; }, [language]);
 
@@ -31,7 +31,7 @@ export function useLanguage() {
 
 export function useInvitationCopy() {
   const { language, addressing } = useLanguage();
-  return getCopy(language, addressing);
+  return addressing ? getCopy(language, addressing) : editorialContent;
 }
 
 
@@ -58,4 +58,3 @@ export function LanguageSwitcher() {
     </div>
   );
 }
-

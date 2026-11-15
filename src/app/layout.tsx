@@ -1,40 +1,37 @@
-import type { Metadata } from "next";
-import { Barlow_Condensed, Be_Vietnam_Pro } from "next/font/google";
-import { siteContent } from "@/data/content";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Barlow_Condensed, Be_Vietnam_Pro } from 'next/font/google';
+import { siteContent } from '@/data/content';
+import './globals.css';
 
 const bodyFont = Be_Vietnam_Pro({
-  variable: "--font-body",
-  subsets: ["latin", "vietnamese"],
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
+  variable: '--font-body',
+  subsets: ['latin', 'vietnamese'],
+  weight: ['400', '500', '600', '700', '800'],
+  display: 'swap',
 });
 
 const displayFont = Barlow_Condensed({
-  variable: "--font-display",
-  subsets: ["latin", "vietnamese"],
-  weight: ["700", "800", "900"],
-  display: "swap",
+  variable: '--font-display',
+  subsets: ['latin', 'vietnamese'],
+  weight: ['700', '800', '900'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
   title: siteContent.title,
   description: siteContent.description,
-  referrer: "no-referrer",
+  referrer: 'no-referrer',
   robots: { index: false, follow: false },
   openGraph: {
     title: siteContent.title,
     description: siteContent.description,
-    type: "website",
+    type: 'website',
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: LayoutProps<'/'>) {
   return (
-    <html
-      lang="en"
-      className={`${bodyFont.variable} ${displayFont.variable} h-full antialiased`}
-    >
+    <html lang="en" className={`${bodyFont.variable} ${displayFont.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

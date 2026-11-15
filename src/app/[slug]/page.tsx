@@ -1,7 +1,7 @@
-import { Suspense } from "react";
-import { notFound } from "next/navigation";
-import InvitationPage from "@/components/invitation/InvitationPage";
-import { getGuest, getGuestRouteParams } from "@/data/guests";
+import { Suspense } from 'react';
+import { notFound } from 'next/navigation';
+import InvitationPage from '@/components/invitation/InvitationPage';
+import { getGuest, getGuestRouteParams } from '@/data/guests';
 
 // Fully render known invitations so native disclosure works without JavaScript.
 export function generateStaticParams() {

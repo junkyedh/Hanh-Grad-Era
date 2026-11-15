@@ -1,4 +1,4 @@
-import { siteContent } from "@/data/content";
+import { siteContent } from '@/data/content';
 
 export default function NotFound() {
   return (

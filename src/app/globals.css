@@ -214,7 +214,6 @@ button:disabled {
     transform 250ms ease;
 }
 
-
 .envelope-paper-label,
 .envelope-name {
   position: absolute;
@@ -228,20 +227,20 @@ button:disabled {
   color: var(--cherry);
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: .14em;
+  letter-spacing: 0.14em;
   line-height: 1.5;
   text-transform: uppercase;
   opacity: 1;
   transition: opacity 180ms ease;
 }
 
-[data-phase="opening"] .envelope-paper-label,
-[data-phase="open"] .envelope-paper-label {
+[data-phase='opening'] .envelope-paper-label,
+[data-phase='open'] .envelope-paper-label {
   opacity: 0;
 }
 
-[data-phase="opening"] .envelope-name,
-[data-phase="open"] .envelope-name {
+[data-phase='opening'] .envelope-name,
+[data-phase='open'] .envelope-name {
   opacity: 1;
   transform: translateY(0);
   transition-delay: 260ms;
@@ -466,6 +465,10 @@ button:disabled {
   background: var(--cherry);
   display: grid;
   place-items: center;
+}
+.portrait-image {
+  object-fit: cover;
+  object-position: center 25%;
 }
 .portrait-orbit {
   position: absolute;
@@ -1092,7 +1095,19 @@ button:disabled {
   font-size: 24px;
   line-height: 1;
 }
-
+.general-closing {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  padding-block: 84px;
+  background: var(--butter);
+  text-align: center;
+}
+.general-closing h2 {
+  color: var(--cherry);
+  font-size: clamp(56px, 10vw, 128px);
+  line-height: 0.98;
+}
 [data-reveal] {
   transition:
     opacity 600ms ease,

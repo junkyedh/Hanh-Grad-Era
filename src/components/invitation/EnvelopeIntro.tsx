@@ -48,9 +48,6 @@ export default function EnvelopeIntro({
           </span>
           <span className="envelope">
             <span className="envelope-paper">
-              <span className="envelope-paper-label" aria-hidden="true">
-                {copy.postal}
-              </span>
               <span className="envelope-name" aria-hidden={phase === 'closed'}>
                 {displayName}
               </span>

@@ -6,8 +6,8 @@ export const event = {
   timeZone: "Asia/Ho_Chi_Minh",
   photoSession: {
     label: "Guest meeting / photo session",
-    startsAt: "2026-11-28T10:00:00+07:00",
-    endsAt: "2026-11-28T12:00:00+07:00",
+    startsAt: "2026-11-28T09:30:00+07:00",
+    endsAt: "2026-11-28T11:30:00+07:00",
   },
   venue: "Hội trường Trần Chí Đáo",
   building: "Nhà Điều hành Đại học Quốc gia Thành phố Hồ Chí Minh",

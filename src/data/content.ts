@@ -18,19 +18,19 @@ export function getVietnameseInvitationMessage(guest: Readonly<Guest>): string {
   const who = guest.name.trim();
   switch (guest.addressing) {
     case "co":
-      return `Em tốt nghiệp rồi ạ Ngày 28/11 này, cô ghé qua chụp với em vài tấm hình kỷ niệm được không ạ? Em mong được gặp cô hôm đó!`;
+      return `Em tốt nghiệp rồi ạ. Ngày 28/11 này, cô ghé qua chụp với em vài tấm hình kỷ niệm được không ạ? Em mong được gặp cô hôm đó!`;
     case "anh":
-      return `Em tốt nghiệp rồi nè Ngày 28/11 này, anh ghé qua chụp với em vài tấm hình kỷ niệm nhé. Hy vọng hôm đó được gặp anh ạ!`;
+      return `Em tốt nghiệp rồi nè. Ngày 28/11 này, anh ghé qua chụp với em vài tấm hình kỷ niệm nhé. Hy vọng hôm đó được gặp anh ạ!`;
     case "chi":
-      return `Em tốt nghiệp rồi nè Ngày 28/11 này, chị ghé qua chụp với em vài tấm hình kỷ niệm nhé. Hy vọng hôm đó được gặp chị ạ!`;
+      return `Em tốt nghiệp rồi nè. Ngày 28/11 này, chị ghé qua chụp với em vài tấm hình kỷ niệm nhé. Hy vọng hôm đó được gặp chị ạ!`;
     case "be":
-      return `Chị tốt nghiệp rồi nè Ngày 28/11 này, bé ghé qua chụp với chị vài tấm hình nha. Mong gặp bé hôm đó!`;
+      return `Chị tốt nghiệp rồi nè. Ngày 28/11 này, bé ghé qua chụp với chị vài tấm hình nha. Mong gặp bé hôm đó!`;
     case "em":
-      return `Chị tốt nghiệp rồi nè Ngày 28/11 này, em ghé qua chụp với chị vài tấm hình nha. Mong gặp em hôm đó!`;
+      return `Chị tốt nghiệp rồi nè. Ngày 28/11 này, em ghé qua chụp với chị vài tấm hình nha. Mong gặp em hôm đó!`;
     case "ban":
       return `28/11 này Hải Hạnh tốt nghiệp rồi. Không biết hôm đó ${who} có rảnh ghé qua chụp với Hải Hạnh vài tấm hình không? Hải Hạnh muốn có một tấm hình với ${who} hôm ấy.\n\nHy vọng gặp ${who} nha.`;
     default:
-      return `28/11 này Hải Hạnh tốt nghiệp rồi Hôm đó ghé qua chụp với Hải Hạnh vài tấm hình nha. Mong được gặp bạn!`;
+      return `28/11 này Hải Hạnh tốt nghiệp rồi. Hôm đó ghé qua chụp với Hải Hạnh vài tấm hình nha. Mong được gặp bạn!`;
   }
 }
 

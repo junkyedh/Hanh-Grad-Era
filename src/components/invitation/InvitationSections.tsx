@@ -200,7 +200,7 @@ export function EventDetails({ general = false }: { general?: boolean }) {
         </time>
         <p className="event-time font-display">
           {general
-            ? '10:00–12:00'
+            ? '09:30–11:30'
             : `${timeFormat.format(new Date(event.photoSession.startsAt))}–${timeFormat.format(new Date(event.photoSession.endsAt))}`}
         </p>
       </div>

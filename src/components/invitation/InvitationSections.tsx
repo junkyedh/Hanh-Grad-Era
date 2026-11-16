@@ -106,14 +106,11 @@ export function PersonalLetter({
               <em>{copy.letter.displayEnd}</em>
             ) : (
               <>
-                FOR <em>{copy.letter.displayEnd}</em>
+                <em>{copy.letter.displayEnd}</em>
               </>
             )}
           </span>
         </p>
-        <span className="letter-arrow" aria-hidden="true">
-          ↗
-        </span>
       </div>
       <div className="letter-card">
         <span className="letter-stamp font-display" aria-hidden="true">
@@ -275,7 +272,6 @@ export function LocationSection() {
         </div>
         <div className="location-help" data-reveal="right">
           <h3 className={`location-subheading ${language === "vi" ? "font-body" : "font-display"}`}>{copy.location.assistance}</h3>
-          {copy.location.hint && <p>{copy.location.hint}</p>}
           <div className="help-contact">
             {helpContacts.map((contact) => (
               <div className="help-contact-person" key={contact.tel}>

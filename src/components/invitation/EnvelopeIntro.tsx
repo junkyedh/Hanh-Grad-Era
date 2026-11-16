@@ -28,9 +28,6 @@ export default function EnvelopeIntro({
           ))}
         </h2>
         <p className="intro-note">{copy.note}</p>
-        <span className="intro-arrow" aria-hidden="true">
-          ↗
-        </span>
       </div>
       <details className="envelope-disclosure" open={phase === 'open'}>
         <summary

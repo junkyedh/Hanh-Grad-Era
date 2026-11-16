@@ -5,7 +5,7 @@ export type GuestAddressing = 'co' | 'anh' | 'chi' | 'be' | 'em' | 'ban';
 
 const englishInvitationMessages: Record<Guest['relationship'], string> = {
   senior:
-    "I'd love for you to join me for a few photos and happy memories on my graduation day. Having you there would mean so much to me!",
+    "I'd love for you to join me for a few photos and to make happy memories on my graduation day. Having you there would mean so much to me.",
   friend:
     "Come celebrate my graduation with me! Let's take a few photos and make some happy memories together.",
   junior:

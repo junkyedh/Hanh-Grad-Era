@@ -60,7 +60,7 @@ export function CoverSection({ general = false }: { general?: boolean }) {
         <figure className="portrait-frame">
           <div className="portrait-placeholder">
             <Image
-              src="/picture-portrait-h.jpg"
+              src="/picture-graduation.jpg"
               alt="Dương Hải Hạnh - Graduation Portrait"
               fill
               priority

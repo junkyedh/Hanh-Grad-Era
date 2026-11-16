@@ -93,7 +93,7 @@ export default function InvitationExperience({
   );
 
   return (
-    <LanguageProvider addressing={addressing} initialLanguage={general ? 'en' : 'vi'}>
+    <LanguageProvider addressing={addressing} initialLanguage="en">
       <div className="invitation-experience" data-phase={phase}>
         {general ? (
           invitationContent

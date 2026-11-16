@@ -720,7 +720,6 @@ button:disabled {
 .location-help > p {
   font-size: clamp(14px, 1.4vw, 17px);
   line-height: 1.75;
-  max-width: 30ch;
 }
 .help-contact {
   margin-top: clamp(28px, 5vw, 60px);
